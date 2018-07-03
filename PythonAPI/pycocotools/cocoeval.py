@@ -457,32 +457,40 @@ class COCOeval:
             print(iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets, mean_s))
             return mean_s
         def _summarizeDets():
-            stats = np.zeros((12,))
+            stats = np.zeros((16,))
             stats[0] = _summarize(1)
             stats[1] = _summarize(1, iouThr=.5, maxDets=self.params.maxDets[2])
             stats[2] = _summarize(1, iouThr=.75, maxDets=self.params.maxDets[2])
             stats[3] = _summarize(1, areaRng='small', maxDets=self.params.maxDets[2])
             stats[4] = _summarize(1, areaRng='medium', maxDets=self.params.maxDets[2])
             stats[5] = _summarize(1, areaRng='large', maxDets=self.params.maxDets[2])
-            stats[6] = _summarize(0, maxDets=self.params.maxDets[0])
-            stats[7] = _summarize(0, maxDets=self.params.maxDets[1])
-            stats[8] = _summarize(0, maxDets=self.params.maxDets[2])
-            stats[9] = _summarize(0, areaRng='small', maxDets=self.params.maxDets[2])
-            stats[10] = _summarize(0, areaRng='medium', maxDets=self.params.maxDets[2])
-            stats[11] = _summarize(0, areaRng='large', maxDets=self.params.maxDets[2])
+            stats[6] = _summarize(1, areaRng='xl', maxDets=self.params.maxDets[2])
+            stats[7] = _summarize(1, areaRng='xxl', maxDets=self.params.maxDets[2])
+            stats[8] = _summarize(0, maxDets=self.params.maxDets[0])
+            stats[9] = _summarize(0, maxDets=self.params.maxDets[1])
+            stats[10] = _summarize(0, maxDets=self.params.maxDets[2])
+            stats[11] = _summarize(0, areaRng='small', maxDets=self.params.maxDets[2])
+            stats[12] = _summarize(0, areaRng='medium', maxDets=self.params.maxDets[2])
+            stats[13] = _summarize(0, areaRng='large', maxDets=self.params.maxDets[2])
+            stats[14] = _summarize(0, areaRng='xl', maxDets=self.params.maxDets[2])
+            stats[15] = _summarize(0, areaRng='xxl', maxDets=self.params.maxDets[2])
             return stats
         def _summarizeKps():
-            stats = np.zeros((10,))
+            stats = np.zeros((14,))
             stats[0] = _summarize(1, maxDets=20)
             stats[1] = _summarize(1, maxDets=20, iouThr=.5)
             stats[2] = _summarize(1, maxDets=20, iouThr=.75)
             stats[3] = _summarize(1, maxDets=20, areaRng='medium')
             stats[4] = _summarize(1, maxDets=20, areaRng='large')
-            stats[5] = _summarize(0, maxDets=20)
-            stats[6] = _summarize(0, maxDets=20, iouThr=.5)
-            stats[7] = _summarize(0, maxDets=20, iouThr=.75)
-            stats[8] = _summarize(0, maxDets=20, areaRng='medium')
-            stats[9] = _summarize(0, maxDets=20, areaRng='large')
+            stats[5] = _summarize(1, maxDets=20, areaRng='xl')
+            stats[6] = _summarize(1, maxDets=20, areaRng='xxl')
+            stats[7] = _summarize(0, maxDets=20)
+            stats[8] = _summarize(0, maxDets=20, iouThr=.5)
+            stats[9] = _summarize(0, maxDets=20, iouThr=.75)
+            stats[10] = _summarize(0, maxDets=20, areaRng='medium')
+            stats[11] = _summarize(0, maxDets=20, areaRng='large')
+            stats[12] = _summarize(0, maxDets=20, areaRng='xl')
+            stats[13] = _summarize(0, maxDets=20, areaRng='xxl')
             return stats
         if not self.eval:
             raise Exception('Please run accumulate() first')
@@ -507,8 +515,8 @@ class Params:
         self.iouThrs = np.linspace(.5, 0.95, np.round((0.95 - .5) / .05) + 1, endpoint=True)
         self.recThrs = np.linspace(.0, 1.00, np.round((1.00 - .0) / .01) + 1, endpoint=True)
         self.maxDets = [1, 10, 100]
-        self.areaRng = [[0 ** 2, 1e5 ** 2], [0 ** 2, 32 ** 2], [32 ** 2, 96 ** 2], [96 ** 2, 1e5 ** 2]]
-        self.areaRngLbl = ['all', 'small', 'medium', 'large']
+        self.areaRng = [[0 ** 2, 1e5 ** 2], [0 ** 2, 32 ** 2], [32 ** 2, 64 ** 2], [64 ** 2, 96 ** 2], [96 ** 2, 128 ** 2], [128 ** 2, 1e5 ** 2]]
+        self.areaRngLbl = ['all', 'small', 'medium', 'large', 'xl', 'xxl']
         self.useCats = 1
 
     def setKpParams(self):
@@ -518,8 +526,8 @@ class Params:
         self.iouThrs = np.linspace(.5, 0.95, np.round((0.95 - .5) / .05) + 1, endpoint=True)
         self.recThrs = np.linspace(.0, 1.00, np.round((1.00 - .0) / .01) + 1, endpoint=True)
         self.maxDets = [20]
-        self.areaRng = [[0 ** 2, 1e5 ** 2], [32 ** 2, 96 ** 2], [96 ** 2, 1e5 ** 2]]
-        self.areaRngLbl = ['all', 'medium', 'large']
+        self.areaRng = [[0 ** 2, 1e5 ** 2], [32 ** 2, 64 ** 2], [64 ** 2, 96 ** 2], [96 ** 2, 128 ** 2], [128 ** 2, 1e5 ** 2]]
+        self.areaRngLbl = ['all', 'medium', 'large', 'xl', 'xxl']
         self.useCats = 1
 
     def __init__(self, iouType='segm'):
